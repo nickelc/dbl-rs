@@ -1,0 +1,18 @@
+[package]
+name = "webhook"
+version = "0.1.0"
+authors = ["Constantin Nickel <constantin.nickel@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+dbl-rs = { path = "../.." }
+warp = "0.1"
+
+[dependencies.serde]
+version = "1"
+features = ["derive"]
+
+[dependencies.reqwest]
+version = "0.9"
+default-features = false
+features = ["rustls-tls"]
