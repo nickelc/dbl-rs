@@ -4,16 +4,8 @@ use std::sync::Arc;
 use futures::future::{self, Future};
 use reqwest::header::AUTHORIZATION;
 use reqwest::r#async::{Client as ReqwestClient, Response};
-use reqwest::{Method, StatusCode, Url};
-
-mod error;
-pub mod model;
-
-pub use error::Error;
-
-use model::*;
-
-type BoxFuture<T> = Box<dyn Future<Item = T, Error = Error> + Send>;
+use reqwest::{Method, StatusCode};
+use url::Url;
 
 macro_rules! api {
     ($e:expr) => {
@@ -23,6 +15,16 @@ macro_rules! api {
         format!(api!($e), $($rest)*)
     };
 }
+
+mod error;
+pub mod model;
+pub mod widget;
+
+pub use error::Error;
+
+use model::*;
+
+type BoxFuture<T> = Box<dyn Future<Item = T, Error = Error> + Send>;
 
 pub struct Client {
     client: Arc<ReqwestClient>,
@@ -56,7 +58,7 @@ impl Client {
 
     /// Search for bots.
     pub fn search(&self, filter: &Filter) -> impl Future<Item = Listing, Error = Error> {
-        let url = match Url::parse_with_params(&api!("/bots"), filter.0.iter()) {
+        let url = match Url::parse_with_params(&api!("/bots"), &filter.0) {
             Ok(url) => url,
             Err(e) => return future::Either::A(future::err(Error::Url(e))),
         };

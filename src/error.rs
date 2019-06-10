@@ -1,12 +1,13 @@
 use std::fmt;
 
-use reqwest::{StatusCode, UrlError};
+use reqwest::StatusCode;
+use url::ParseError;
 
 #[derive(Debug)]
 pub enum Error {
     Ratelimit { retry_after: u32 },
     Reqwest(reqwest::Error),
-    Url(UrlError),
+    Url(ParseError),
 }
 
 impl Error {
