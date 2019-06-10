@@ -38,11 +38,11 @@ pub struct DetailedUser {
 
 #[derive(Debug, Deserialize)]
 pub struct Social {
-    github: String,
-    instagram: String,
-    reddit: String,
-    twitter: String,
-    youtube: String,
+    pub github: String,
+    pub instagram: String,
+    pub reddit: String,
+    pub twitter: String,
+    pub youtube: String,
 }
 
 #[derive(Debug, Deserialize)]
