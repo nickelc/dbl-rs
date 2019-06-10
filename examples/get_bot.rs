@@ -10,7 +10,7 @@ fn main() {
     let mut rt = Runtime::new().expect("failed rt");
     let client = Client::new(token);
 
-    let task = client.get(565030624499466240);
+    let task = client.get(565_030_624_499_466_240);
 
     match rt.block_on(task) {
         Ok(bot) => println!("{:#?}", bot),
