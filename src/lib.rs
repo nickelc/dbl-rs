@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::sync::Arc;
 
 use futures::future::{self, Future};
@@ -152,49 +151,5 @@ impl Client {
         T: ::serde::Serialize + Sized,
     {
         self.request(Method::POST, url, data)
-    }
-}
-
-/// Filter for searching bots.
-pub struct Filter(HashMap<&'static str, String>);
-
-impl Default for Filter {
-    fn default() -> Filter {
-        Filter::new()
-    }
-}
-
-impl Filter {
-    pub fn new() -> Filter {
-        Filter(HashMap::with_capacity(4))
-    }
-
-    pub fn limit(mut self, mut limit: u16) -> Filter {
-        if limit > 500 {
-            limit = 500;
-        }
-        self.0.insert("limit", limit.to_string());
-        self
-    }
-
-    pub fn offset(mut self, offset: u16) -> Filter {
-        self.0.insert("offset", offset.to_string());
-        self
-    }
-
-    pub fn sort<T: AsRef<str>>(mut self, field: T, ascending: bool) -> Filter {
-        let mut buf = String::new();
-        if !ascending {
-            buf.push('-');
-        }
-        buf.push_str(field.as_ref());
-        self.0.insert("sort", buf);
-        self
-    }
-
-    /// Search string. Example: `lib:serenity mod`
-    pub fn search<T: ToString>(mut self, search: T) -> Filter {
-        self.0.insert("search", search.to_string());
-        self
     }
 }
