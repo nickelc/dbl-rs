@@ -1,13 +1,22 @@
 # dbl-rs
+[![crates.io][crates-badge]][crates-url]
+[![docs.rs][docs-badge]][docs-url]
+![License][license-badge]
+
+[crates-badge]: https://img.shields.io/crates/v/dbl-rs.svg
+[crates-url]: https://crates.io/crates/dbl-rs
+[docs-badge]: https://docs.rs/dbl-rs/badge.svg
+[docs-url]: https://docs.rs/dbl-rs
+[license-badge]: https://img.shields.io/crates/l/dbl-rs.svg
 
 Rust bindings for the [discordbots.org](https://discordbots.org) API.
 
 ## Usage
 
-To use `dbl-rs`, add this to your `Cargo.toml`
+Add this to your `Cargo.toml`
 ```toml
 [dependencies]
-dbl-rs = { git = "https://github.com/nickelc/dbl-rs" }
+dbl-rs = "0.1"
 ```
 
 ## Example
