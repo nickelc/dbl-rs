@@ -73,8 +73,8 @@ impl Client {
             .and_then(|mut resp| resp.json().map_err(error::from))
     }
 
-    /// Post the stats of a bot.
-    pub fn post_stats<T>(&self, bot: T, stats: PostStats) -> impl Future<Item = (), Error = Error>
+    /// Update the stats of a bot.
+    pub fn update_stats<T>(&self, bot: T, stats: ShardStats) -> impl Future<Item = (), Error = Error>
     where
         T: Into<BotId>,
     {

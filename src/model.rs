@@ -85,7 +85,7 @@ pub struct Stats {
 
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
-pub enum PostStats {
+pub enum ShardStats {
     Cumulative {
         server_count: u64,
         shard_count: Option<u64>,
