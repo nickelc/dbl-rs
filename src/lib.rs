@@ -25,6 +25,7 @@ use model::*;
 
 type BoxFuture<T> = Box<dyn Future<Item = T, Error = Error> + Send>;
 
+/// Endpoint interface to Discord Bot List API.
 pub struct Client {
     client: Arc<ReqwestClient>,
     token: String,
@@ -52,6 +53,14 @@ impl Client {
     }
 
     /// Search for bots.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use dbl::model::Filter;
+    ///
+    /// let filter = Filter::new().search("lib:serenity foobar");
+    /// ```
     pub fn search(&self, filter: &Filter) -> impl Future<Item = Listing, Error = Error> {
         let url = match Url::parse_with_params(&api!("/bots"), &filter.0) {
             Ok(url) => url,
@@ -73,6 +82,17 @@ impl Client {
     }
 
     /// Update the stats of a bot.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// use dbl::model::ShardStats;
+    ///
+    /// let new_stats = ShardStats::Cumulative {
+    ///     server_count: 1234,
+    ///     shard_count: None,
+    /// };
+    /// ```
     pub fn update_stats<T>(&self, bot: T, stats: ShardStats) -> impl Future<Item = (), Error = Error>
     where
         T: Into<BotId>,

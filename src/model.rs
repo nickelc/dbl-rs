@@ -2,13 +2,17 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
+/// Newtype for bot ids.
 #[derive(Debug)]
 pub struct BotId(pub u64);
+/// Newtype for user ids.
 #[derive(Debug)]
 pub struct UserId(pub u64);
+/// Newtype for guild ids.
 #[derive(Debug)]
 pub struct GuildId(pub u64);
 
+/// Basic user information returned by [`Client::votes`](../struct.Client.html#method.votes).
 #[derive(Debug, Deserialize)]
 pub struct User {
     pub id: UserId,
@@ -17,6 +21,7 @@ pub struct User {
     pub avatar: Option<String>,
 }
 
+/// Detailed user information returned by [`Client::user`](../struct.Client.html#method.user).
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DetailedUser {
@@ -38,6 +43,7 @@ pub struct DetailedUser {
     pub admin: bool,
 }
 
+/// Social media accounts of the user.
 #[derive(Debug, Deserialize)]
 pub struct Social {
     pub github: String,
@@ -47,6 +53,7 @@ pub struct Social {
     pub youtube: String,
 }
 
+/// Information about a bot.
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Bot {
@@ -78,6 +85,7 @@ pub struct Bot {
     pub monthly_points: u64,
 }
 
+/// Bot's sharding stats.
 #[derive(Debug, Deserialize)]
 pub struct Stats {
     pub server_count: Option<u64>,
@@ -85,6 +93,7 @@ pub struct Stats {
     pub shard_count: Option<u64>,
 }
 
+/// Used to update one or more sharding stats.
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
 pub enum ShardStats {
@@ -102,6 +111,7 @@ pub enum ShardStats {
     },
 }
 
+/// Used for filtering the bot search.
 pub struct Filter(pub(crate) HashMap<&'static str, String>);
 
 impl Default for Filter {
@@ -145,6 +155,7 @@ impl Filter {
     }
 }
 
+/// Search result returned by [`Client::search`](../struct.Client.html#method.search).
 #[derive(Debug, Deserialize)]
 pub struct Listing {
     pub results: Vec<Bot>,
@@ -154,6 +165,7 @@ pub struct Listing {
     pub total: u64,
 }
 
+/// Vote received via webhook.
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Webhook {
@@ -165,6 +177,7 @@ pub struct Webhook {
     pub query: Option<String>,
 }
 
+/// Type of vote received via webhook.
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum WebhookType {
