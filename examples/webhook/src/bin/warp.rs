@@ -1,4 +1,4 @@
-use dbl::model::Webhook;
+use dbl::types::Webhook;
 use warp::body::BodyDeserializeError;
 use warp::http::StatusCode;
 use warp::path;

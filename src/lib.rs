@@ -16,12 +16,12 @@ macro_rules! api {
 }
 
 mod error;
-pub mod model;
+pub mod types;
 pub mod widget;
 
 pub use error::Error;
 
-use model::*;
+use types::*;
 
 type BoxFuture<T> = Box<dyn Future<Item = T, Error = Error> + Send>;
 
@@ -57,7 +57,7 @@ impl Client {
     /// # Example
     ///
     /// ```no_run
-    /// use dbl::model::Filter;
+    /// use dbl::types::Filter;
     ///
     /// let filter = Filter::new().search("lib:serenity foobar");
     /// ```
@@ -86,7 +86,7 @@ impl Client {
     /// # Example
     ///
     /// ```no_run
-    /// use dbl::model::ShardStats;
+    /// use dbl::types::ShardStats;
     ///
     /// let new_stats = ShardStats::Cumulative {
     ///     server_count: 1234,

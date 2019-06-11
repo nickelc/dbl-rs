@@ -1,4 +1,4 @@
-use dbl::model::ShardStats;
+use dbl::types::ShardStats;
 use dbl::Client;
 use tokio::runtime::Runtime;
 

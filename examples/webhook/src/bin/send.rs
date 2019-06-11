@@ -1,4 +1,4 @@
-use dbl::model::{Webhook, WebhookType};
+use dbl::types::{Webhook, WebhookType};
 use reqwest::header::AUTHORIZATION;
 
 fn main() {

@@ -13,7 +13,7 @@ dbl-rs = { git = "https://github.com/nickelc/dbl-rs" }
 ## Example
 
 ```rust
-use dbl::model::ShardStats;
+use dbl::types::ShardStats;
 use dbl::Client;
 use tokio::runtime::Runtime;
 

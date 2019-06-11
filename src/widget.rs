@@ -3,7 +3,7 @@
 use std::collections::HashMap;
 use url::{ParseError, Url};
 
-use crate::model::BotId;
+use crate::types::BotId;
 
 /// URL Builder for [badge widgets](https://discordbots.org/api/docs#widgets).
 pub enum Badge {
