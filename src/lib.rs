@@ -33,13 +33,9 @@ pub struct Client {
 
 impl Client {
     /// Constructs a new `Client`.
-    ///
-    /// # Panic
-    ///
-    /// This method panics if the `reqwest` client cannot initialized.
-    pub fn new(token: String) -> Self {
-        let client = Arc::new(ReqwestClient::new());
-        Client { client, token }
+    pub fn new(token: String) -> Result<Self, Error> {
+        let client = Arc::new(ReqwestClient::builder().build().map_err(error::from)?);
+        Ok(Client { client, token })
     }
 
     /// Constructs a new `Client` with a `reqwest` client.

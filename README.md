@@ -23,7 +23,7 @@ fn main() {
     };
 
     let mut rt = Runtime::new().expect("failed rt");
-    let client = Client::new(token);
+    let client = Client::new(token).expect("failed client");
 
     let task = client.get(565030624499466240);
 
