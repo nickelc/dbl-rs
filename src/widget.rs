@@ -41,7 +41,7 @@ pub struct SmallWidget(HashMap<&'static str, String>);
 
 macro_rules! impl_widget {
     (
-        $widget:ident {
+        $widget:ident($cnt:expr) {
             $(
                 $(#[$fn_meta:ident $($meta_args:tt)*])*
                 $fn:ident: $name:expr;
@@ -49,6 +49,10 @@ macro_rules! impl_widget {
         }
     ) => {
         impl $widget {
+            pub fn new() -> Self {
+                $widget(HashMap::with_capacity($cnt))
+            }
+
             /// Build the widget url.
             pub fn build<T>(self, bot: T) -> Result<Url, ParseError>
             where
@@ -68,10 +72,16 @@ macro_rules! impl_widget {
                 }
             )+
         }
+
+        impl Default for $widget {
+            fn default() -> Self {
+                $widget::new()
+            }
+        }
     };
 }
 
-impl_widget!(LargeWidget {
+impl_widget!(LargeWidget(7) {
     top_color: "topcolor";
     middle_color: "middlecolor";
     username_color: "usernamecolor";
@@ -81,7 +91,7 @@ impl_widget!(LargeWidget {
     hightlight_color: "hightlightcolor";
 });
 
-impl_widget!(SmallWidget {
+impl_widget!(SmallWidget(5) {
     avatarbg_color: "avatarbgcolor";
     left_color: "leftcolor";
     right_color: "rightcolor";
