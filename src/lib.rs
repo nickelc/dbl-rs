@@ -14,15 +14,14 @@
 //! ```no_run
 //! use dbl::types::ShardStats;
 //! use dbl::Client;
-//! use tokio::runtime::Runtime;
 //!
-//! fn main() {
+//! #[tokio::main]
+//! async fn main() {
 //!     let token = match std::env::var("DBL_TOKEN") {
 //!         Ok(token) => token,
 //!         _ => panic!("missing token"),
 //!     };
 //!
-//!     let mut rt = Runtime::new().expect("failed rt");
 //!     let client = Client::new(token).expect("failed client");
 //!
 //!     let bot = 565_030_624_499_466_240;
@@ -31,9 +30,7 @@
 //!         shard_count: None,
 //!     };
 //!
-//!     let task = client.update_stats(bot, stats);
-//!
-//!     match rt.block_on(task) {
+//!     match client.update_stats(bot, stats).await {
 //!         Ok(_) => println!("Update successful"),
 //!         Err(e) => eprintln!("{}", e),
 //!     }
@@ -44,7 +41,7 @@
 
 use std::sync::Arc;
 
-use futures::future::{self, Future};
+use futures_util::TryFutureExt;
 use reqwest::header::AUTHORIZATION;
 use reqwest::r#async::{Client as ReqwestClient, Response};
 use reqwest::{Method, StatusCode};
@@ -67,9 +64,8 @@ pub use error::Error;
 
 use types::*;
 
-type BoxFuture<T> = Box<dyn Future<Item = T, Error = Error> + Send>;
-
 /// Endpoint interface to Discord Bot List API.
+#[derive(Clone)]
 pub struct Client {
     client: Arc<ReqwestClient>,
     token: String,
@@ -88,12 +84,12 @@ impl Client {
     }
 
     /// Get information about a specific bot.
-    pub fn get<T>(&self, bot: T) -> impl Future<Item = Bot, Error = Error>
+    pub async fn get<T>(&self, bot: T) -> Result<Bot, Error>
     where
         T: Into<BotId>,
     {
-        self.get2(&api!("/bots/{}", bot.into()))
-            .and_then(|mut resp| resp.json().map_err(error::from))
+        let url = api!("/bots/{}", bot.into());
+        get(self, url).await
     }
 
     /// Search for bots.
@@ -105,24 +101,18 @@ impl Client {
     ///
     /// let filter = Filter::new().search("lib:serenity foobar");
     /// ```
-    pub fn search(&self, filter: &Filter) -> impl Future<Item = Listing, Error = Error> {
-        let url = match Url::parse_with_params(&api!("/bots"), &filter.0) {
-            Ok(url) => url,
-            Err(e) => return future::Either::A(future::err(Error::Url(e))),
-        };
-        future::Either::B(
-            self.get2(&url.to_string())
-                .and_then(|mut resp| resp.json().map_err(error::from)),
-        )
+    pub async fn search(&self, filter: &Filter) -> Result<Listing, Error> {
+        let url = Url::parse_with_params(&api!("/bots"), &filter.0).map_err(Error::Url)?;
+        get(self, url.to_string()).await
     }
 
     /// Get the stats of a bot.
-    pub fn stats<T>(&self, bot: T) -> impl Future<Item = Stats, Error = Error>
+    pub async fn stats<T>(&self, bot: T) -> Result<Stats, Error>
     where
         T: Into<BotId>,
     {
-        self.get2(&api!("/bots/{}/stats", bot.into()))
-            .and_then(|mut resp| resp.json().map_err(error::from))
+        let url = api!("/bots/{}/stats", bot.into());
+        get(self, url).await
     }
 
     /// Update the stats of a bot.
@@ -137,83 +127,86 @@ impl Client {
     ///     shard_count: None,
     /// };
     /// ```
-    pub fn update_stats<T>(&self, bot: T, stats: ShardStats) -> impl Future<Item = (), Error = Error>
+    pub async fn update_stats<T>(&self, bot: T, stats: ShardStats) -> Result<(), Error>
     where
         T: Into<BotId>,
     {
-        self.post(&api!("/bots/{}/stats", bot.into()), Some(stats))
-            .map(|_| ())
+        let url = api!("/bots/{}/stats", bot.into());
+        post(self, url, Some(stats)).await
     }
 
     /// Get the last 1000 votes for a bot.
-    pub fn votes<T>(&self, bot: T) -> impl Future<Item = Vec<User>, Error = Error>
+    pub async fn votes<T>(&self, bot: T) -> Result<Vec<User>, Error>
     where
         T: Into<BotId>,
     {
-        self.get2(&api!("/bots/{}/votes", bot.into()))
-            .and_then(|mut resp| resp.json().map_err(error::from))
+        let url = api!("/bots/{}/votes", bot.into());
+        get(self, url).await
     }
 
     /// Check if a user has voted for a bot in the past 24 hours.
-    pub fn has_voted<T, U>(&self, bot: T, user: U) -> impl Future<Item = bool, Error = Error>
+    pub async fn has_voted<T, U>(&self, bot: T, user: U) -> Result<bool, Error>
     where
         T: Into<BotId>,
         U: Into<UserId>,
     {
-        self.get2(&api!("/bots/{}/check?userId={}", bot.into(), user.into()))
-            .and_then(|mut resp| resp.json::<UserVoted>().map_err(error::from))
-            .map(|v| v.voted > 0)
+        let bot = bot.into();
+        let user = user.into();
+        let url = api!("/bots/{}/check?userId={}", bot, user);
+        let v: UserVoted = get(self, url).await?;
+        Ok(v.voted > 0)
     }
 
     /// Get information about a user.
-    pub fn user<T>(&self, user: T) -> impl Future<Item = DetailedUser, Error = Error>
+    pub async fn user<T>(&self, user: T) -> Result<DetailedUser, Error>
     where
         T: Into<UserId>,
     {
-        self.get2(&api!("/users/{}", user.into()))
-            .and_then(|mut resp| resp.json().map_err(error::from))
+        let url = api!("/users/{}", user.into());
+        get(self, url).await
+    }
+}
+
+async fn request<T>(
+    client: &Client,
+    method: Method,
+    url: String,
+    data: Option<T>,
+) -> Result<Response, Error>
+where
+    T: serde::Serialize + Sized,
+{
+    let mut req = client
+        .client
+        .request(method, &url)
+        .header(AUTHORIZATION, &*client.token);
+
+    if let Some(data) = data {
+        req = req.json(&data);
     }
 
-    fn request<T>(
-        &self,
-        method: Method,
-        url: &str,
-        data: Option<T>,
-    ) -> impl Future<Item = Response, Error = Error>
-    where
-        T: ::serde::ser::Serialize + Sized,
-    {
-        let mut req = self
-            .client
-            .request(method, url)
-            .header(AUTHORIZATION, &*self.token);
-
-        if let Some(data) = data {
-            req = req.json(&data);
+    let resp = req.send().map_err(error::from).await?;
+    match resp.status() {
+        StatusCode::TOO_MANY_REQUESTS => {
+            let rl = resp.json::<Ratelimit>().map_err(error::from).await?;
+            Err(error::ratelimit(rl.retry_after))
         }
-
-        req.send()
-            .map_err(error::from)
-            .and_then(|mut resp| -> BoxFuture<Response> {
-                match resp.status() {
-                    StatusCode::TOO_MANY_REQUESTS => Box::new(
-                        resp.json::<Ratelimit>()
-                            .map_err(error::from)
-                            .and_then(|r| Err(error::ratelimit(r.retry_after))),
-                    ),
-                    _ => Box::new(future::result(resp.error_for_status().map_err(error::from))),
-                }
-            })
+        _ => resp.error_for_status().map_err(error::from),
     }
+}
 
-    fn get2(&self, url: &str) -> impl Future<Item = Response, Error = Error> {
-        self.request(Method::GET, url, None::<()>)
-    }
+async fn get<T>(client: &Client, url: String) -> Result<T, Error>
+where
+    T: serde::de::DeserializeOwned + Sized,
+{
+    let resp = request(client, Method::GET, url, None::<()>).await?;
+    resp.json().map_err(error::from).await
+}
 
-    fn post<T>(&self, url: &str, data: Option<T>) -> impl Future<Item = Response, Error = Error>
-    where
-        T: ::serde::Serialize + Sized,
-    {
-        self.request(Method::POST, url, data)
-    }
+async fn post<T>(client: &Client, url: String, data: Option<T>) -> Result<(), Error>
+where
+    T: serde::Serialize + Sized,
+{
+    request(client, Method::POST, url, data).await?;
+    Ok(())
 }
