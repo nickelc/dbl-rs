@@ -1,18 +1,22 @@
+use std::future::Future;
+
 use dbl::types::Webhook;
+use futures_util::future;
 use warp::body::BodyDeserializeError;
 use warp::http::StatusCode;
 use warp::path;
 use warp::{Filter, Rejection, Reply};
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let secret = "mywebhook";
 
     let filter = warp::header::<String>("authorization")
         .and_then(move |value| {
             if value == secret {
-                Ok(())
+                future::ok(())
             } else {
-                Err(warp::reject::custom(Unauthorized))
+                future::err(warp::reject::custom(Unauthorized))
             }
         })
         .untuple_one();
@@ -26,11 +30,11 @@ fn main() {
         })
         .recover(custom_error);
 
-    warp::serve(webhook).run(([127, 0, 0, 1], 3030));
+    warp::serve(webhook).run(([127, 0, 0, 1], 3030)).await;
 }
 
-fn custom_error(err: Rejection) -> Result<impl Reply, Rejection> {
-    if err.find_cause::<BodyDeserializeError>().is_some() {
+fn custom_error(err: Rejection) -> impl Future<Output = Result<impl Reply, Rejection>> {
+    let err = if err.find_cause::<BodyDeserializeError>().is_some() {
         Ok(warp::reply::with_status(
             warp::reply(),
             StatusCode::BAD_REQUEST,
@@ -42,7 +46,8 @@ fn custom_error(err: Rejection) -> Result<impl Reply, Rejection> {
         ))
     } else {
         Err(err)
-    }
+    };
+    future::ready(err)
 }
 
 #[derive(Debug)]
