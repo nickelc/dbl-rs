@@ -61,3 +61,9 @@ jobs:
         with:
           command: test
           args: --all --all-features
+
+      - name: Check webhook example
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --manifest-path examples/webhook/Cargo.toml

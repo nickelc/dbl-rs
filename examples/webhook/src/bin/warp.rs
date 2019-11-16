@@ -1,5 +1,3 @@
-use std::future::Future;
-
 use dbl::types::Webhook;
 use futures_util::future;
 use warp::body::BodyDeserializeError;
@@ -20,7 +18,7 @@ async fn main() {
             }
         })
         .untuple_one();
-    let webhook = warp::post2()
+    let webhook = warp::post()
         .and(path!("dbl" / "webhook"))
         .and(filter)
         .and(warp::body::json())
@@ -33,25 +31,26 @@ async fn main() {
     warp::serve(webhook).run(([127, 0, 0, 1], 3030)).await;
 }
 
-fn custom_error(err: Rejection) -> impl Future<Output = Result<impl Reply, Rejection>> {
-    let err = if err.find_cause::<BodyDeserializeError>().is_some() {
+async fn custom_error(err: Rejection) -> Result<impl Reply, Rejection> {
+    if err.find::<BodyDeserializeError>().is_some() {
         Ok(warp::reply::with_status(
             warp::reply(),
             StatusCode::BAD_REQUEST,
         ))
-    } else if err.find_cause::<Unauthorized>().is_some() {
+    } else if err.find::<Unauthorized>().is_some() {
         Ok(warp::reply::with_status(
             warp::reply(),
             StatusCode::UNAUTHORIZED,
         ))
     } else {
         Err(err)
-    };
-    future::ready(err)
+    }
 }
 
 #[derive(Debug)]
 struct Unauthorized;
+
+impl warp::reject::Reject for Unauthorized {}
 
 impl std::fmt::Display for Unauthorized {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
