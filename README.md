@@ -2,11 +2,14 @@
 [![crates.io][crates-badge]][crates-url]
 [![docs.rs][docs-badge]][docs-url]
 ![License][license-badge]
+[![build status][actions-badge]][actions-url]
 
 [crates-badge]: https://img.shields.io/crates/v/dbl-rs.svg
 [crates-url]: https://crates.io/crates/dbl-rs
 [docs-badge]: https://docs.rs/dbl-rs/badge.svg
 [docs-url]: https://docs.rs/dbl-rs
+[actions-badge]: https://github.com/nickelc/dbl-rs/workflows/ci/badge.svg
+[actions-url]: https://github.com/nickelc/dbl-rs/actions
 [license-badge]: https://img.shields.io/crates/l/dbl-rs.svg
 
 Rust bindings for the [discordbots.org](https://discordbots.org) API.
