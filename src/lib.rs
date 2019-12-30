@@ -43,7 +43,7 @@ use std::sync::Arc;
 
 use futures_util::TryFutureExt;
 use reqwest::header::AUTHORIZATION;
-use reqwest::r#async::{Client as ReqwestClient, Response};
+use reqwest::{Client as ReqwestClient, Response};
 use reqwest::{Method, StatusCode};
 use url::Url;
 

@@ -6,13 +6,13 @@ edition = "2018"
 
 [dependencies]
 dbl-rs = { path = "../.." }
-futures-util-preview = "0.3.0-alpha.19"
+futures-util = "0.3.0"
 warp = { git = "https://github.com/seanmonstar/warp.git" }
-tokio = "0.2.0-alpha.6"
+tokio = "0.2.0"
 
 [dependencies.serde]
 version = "1"
 features = ["derive"]
 
 [dependencies.reqwest]
-version = "=0.10.0-alpha.2"
+version = "0.10.0"

@@ -14,14 +14,23 @@ edition = "2018"
 [lib]
 name = "dbl"
 
+[features]
+default = ["rustls-tls"]
+native-tls = ["reqwest/default-tls"]
+rustls-tls = ["reqwest/rustls-tls"]
+
 [dependencies]
-futures-util-preview = "=0.3.0-alpha.19"
-reqwest = { version = "=0.10.0-alpha.2", features = ["json"] }
+futures-util = { version = "0.3", default-features = false }
 url = "2.1"
+
+[dependencies.reqwest]
+version = "0.10"
+default-features = false
+features = ["json"]
 
 [dependencies.serde]
 version = "1"
 features = ["derive"]
 
 [dev-dependencies]
-tokio = "=0.2.0-alpha.6"
+tokio = { version = "0.2.0", features = ["macros"] }
