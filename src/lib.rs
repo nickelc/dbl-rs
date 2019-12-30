@@ -39,8 +39,6 @@
 #![doc(html_root_url = "https://docs.rs/dbl-rs/0.1.1")]
 #![deny(rust_2018_idioms)]
 
-use std::sync::Arc;
-
 use futures_util::TryFutureExt;
 use reqwest::header::AUTHORIZATION;
 use reqwest::{Client as ReqwestClient, Response};
@@ -67,19 +65,19 @@ use types::*;
 /// Endpoint interface to Discord Bot List API.
 #[derive(Clone)]
 pub struct Client {
-    client: Arc<ReqwestClient>,
+    client: ReqwestClient,
     token: String,
 }
 
 impl Client {
     /// Constructs a new `Client`.
     pub fn new(token: String) -> Result<Self, Error> {
-        let client = Arc::new(ReqwestClient::builder().build().map_err(error::from)?);
+        let client = ReqwestClient::builder().build().map_err(error::from)?;
         Ok(Client { client, token })
     }
 
     /// Constructs a new `Client` with a `reqwest` client.
-    pub fn new_with(client: Arc<ReqwestClient>, token: String) -> Self {
+    pub fn new_with_client(client: ReqwestClient, token: String) -> Self {
         Client { client, token }
     }
 
