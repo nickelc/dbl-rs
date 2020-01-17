@@ -19,7 +19,7 @@ Rust bindings for the [top.gg](https://top.gg) / discordbots.org API.
 Add this to your `Cargo.toml`
 ```toml
 [dependencies]
-dbl-rs = "0.1"
+dbl-rs = "0.2"
 ```
 
 ## Example
