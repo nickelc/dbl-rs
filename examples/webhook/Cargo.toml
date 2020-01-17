@@ -7,8 +7,8 @@ edition = "2018"
 [dependencies]
 dbl-rs = { path = "../.." }
 futures-util = "0.3.0"
-warp = { git = "https://github.com/seanmonstar/warp.git" }
-tokio = "0.2.0"
+tokio = { version = "0.2", features = ["macros"] }
+warp = { version = "0.2", default-features = false }
 
 [dependencies.serde]
 version = "1"
