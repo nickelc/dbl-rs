@@ -12,7 +12,7 @@
 [actions-url]: https://github.com/nickelc/dbl-rs/actions
 [license-badge]: https://img.shields.io/crates/l/dbl-rs.svg
 
-Rust bindings for the [discordbots.org](https://discordbots.org) API.
+Rust bindings for the [top.gg](https://top.gg) / discordbots.org API.
 
 ## Usage
 

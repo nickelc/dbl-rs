@@ -1,6 +1,6 @@
 //! # dbl-rs
 //!
-//! Rust bindings for the [discordbots.org](https://discordbots.org) API.
+//! Rust bindings for the [top.gg](https://top.gg) / discordbots.org API.
 //! ## Usage
 //!
 //! Add this to your `Cargo.toml`
@@ -47,7 +47,7 @@ use url::Url;
 
 macro_rules! api {
     ($e:expr) => {
-        concat!("https://discordbots.org/api", $e)
+        concat!("https://top.gg/api", $e)
     };
     ($e:expr, $($rest:tt)*) => {
         format!(api!($e), $($rest)*)
