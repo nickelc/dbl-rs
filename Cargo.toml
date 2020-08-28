@@ -10,6 +10,7 @@ authors = ["Constantin Nickel <constantin.nickel@gmail.com>"]
 keywords = ["discord", "bots"]
 categories = ["api-bindings", "web-programming::http-client"]
 edition = "2018"
+include = ["src/**/*", "LICENSE-*", "README.md"]
 
 [lib]
 name = "dbl"
