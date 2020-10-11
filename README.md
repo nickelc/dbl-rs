@@ -1,6 +1,7 @@
 # dbl-rs
 [![crates.io][crates-badge]][crates-url]
 [![docs.rs][docs-badge]][docs-url]
+![Rust version][rust-version]
 ![License][license-badge]
 [![build status][actions-badge]][actions-url]
 
@@ -8,6 +9,7 @@
 [crates-url]: https://crates.io/crates/dbl-rs
 [docs-badge]: https://docs.rs/dbl-rs/badge.svg
 [docs-url]: https://docs.rs/dbl-rs
+[rust-version]: https://img.shields.io/badge/rust-1.42%2B-red.svg
 [actions-badge]: https://github.com/nickelc/dbl-rs/workflows/ci/badge.svg
 [actions-url]: https://github.com/nickelc/dbl-rs/actions
 [license-badge]: https://img.shields.io/crates/l/dbl-rs.svg
