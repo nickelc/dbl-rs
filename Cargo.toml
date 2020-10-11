@@ -1,6 +1,6 @@
 [package]
 name = "dbl-rs"
-version = "0.2.1"
+version = "0.2.2"
 description = "API Bindings for top.gg / discordbots.org"
 readme = "README.md"
 documentation = "https://docs.rs/dbl-rs"
