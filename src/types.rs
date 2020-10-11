@@ -12,7 +12,7 @@ pub struct UserId(pub u64);
 #[derive(Debug)]
 pub struct GuildId(pub u64);
 
-/// Basic user information returned by [`Client::votes`](../struct.Client.html#method.votes).
+/// Basic user information returned by [`Client::votes`](super::Client::votes).
 #[derive(Debug, Deserialize)]
 pub struct User {
     pub id: UserId,
@@ -21,7 +21,7 @@ pub struct User {
     pub avatar: Option<String>,
 }
 
-/// Detailed user information returned by [`Client::user`](../struct.Client.html#method.user).
+/// Detailed user information returned by [`Client::user`](super::Client::user).
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DetailedUser {
@@ -155,7 +155,7 @@ impl Filter {
     }
 }
 
-/// Search result returned by [`Client::search`](../struct.Client.html#method.search).
+/// Search result returned by [`Client::search`](super::Client::search).
 #[derive(Debug, Deserialize)]
 pub struct Listing {
     pub results: Vec<Bot>,
