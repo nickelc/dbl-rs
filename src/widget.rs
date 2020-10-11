@@ -5,7 +5,7 @@ use url::{ParseError, Url};
 
 use crate::types::BotId;
 
-/// URL Builder for [badge widgets](https://discordbots.org/api/docs#widgets).
+/// URL Builder for [badge widgets](https://top.gg/api/docs#widgets).
 pub enum Badge {
     Owner,
     Upvotes,
@@ -34,9 +34,9 @@ impl Badge {
     }
 }
 
-/// URL Builder for [large widgets](https://discordbots.org/api/docs#widgets).
+/// URL Builder for [large widgets](https://top.gg/api/docs#widgets).
 pub struct LargeWidget(HashMap<&'static str, String>);
-/// URL Builder for [small widgets](https://discordbots.org/api/docs#widgets).
+/// URL Builder for [small widgets](https://top.gg/api/docs#widgets).
 pub struct SmallWidget(HashMap<&'static str, String>);
 
 macro_rules! impl_widget {
