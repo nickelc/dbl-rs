@@ -46,11 +46,11 @@ pub struct DetailedUser {
 /// Social media accounts of the user.
 #[derive(Debug, Deserialize)]
 pub struct Social {
-    pub github: String,
-    pub instagram: String,
-    pub reddit: String,
-    pub twitter: String,
-    pub youtube: String,
+    pub github: Option<String>,
+    pub instagram: Option<String>,
+    pub reddit: Option<String>,
+    pub twitter: Option<String>,
+    pub youtube: Option<String>,
 }
 
 /// Information about a bot.
