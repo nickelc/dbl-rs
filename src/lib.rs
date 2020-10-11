@@ -39,7 +39,6 @@
 #![doc(html_root_url = "https://docs.rs/dbl-rs/0.2.0")]
 #![deny(rust_2018_idioms)]
 
-use futures_util::TryFutureExt;
 use reqwest::header::AUTHORIZATION;
 use reqwest::{Client as ReqwestClient, Response};
 use reqwest::{Method, StatusCode};
@@ -183,10 +182,16 @@ where
         req = req.json(&data);
     }
 
-    let resp = req.send().map_err(error::from).await?;
+    let resp = match req.send().await {
+        Ok(resp) => resp,
+        Err(e) => return Err(error::from(e)),
+    };
     match resp.status() {
         StatusCode::TOO_MANY_REQUESTS => {
-            let rl = resp.json::<Ratelimit>().map_err(error::from).await?;
+            let rl = match resp.json::<Ratelimit>().await {
+                Ok(rl) => rl,
+                Err(e) => return Err(error::from(e)),
+            };
             Err(error::ratelimit(rl.retry_after))
         }
         _ => resp.error_for_status().map_err(error::from),
@@ -198,7 +203,10 @@ where
     T: serde::de::DeserializeOwned + Sized,
 {
     let resp = request(client, Method::GET, url, None::<()>).await?;
-    resp.json().map_err(error::from).await
+    match resp.json().await {
+        Ok(data) => Ok(data),
+        Err(e) => Err(error::from(e)),
+    }
 }
 
 async fn post<T>(client: &Client, url: String, data: Option<T>) -> Result<(), Error>

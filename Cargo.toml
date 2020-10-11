@@ -21,7 +21,6 @@ native-tls = ["reqwest/default-tls"]
 rustls-tls = ["reqwest/rustls-tls"]
 
 [dependencies]
-futures-util = { version = "0.3", default-features = false }
 url = "2.1"
 
 [dependencies.reqwest]
