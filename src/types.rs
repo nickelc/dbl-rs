@@ -187,10 +187,7 @@ pub enum WebhookType {
 
 impl Webhook {
     pub fn is_test(&self) -> bool {
-        match self.kind {
-            WebhookType::Test => true,
-            _ => false,
-        }
+        std::matches!(self.kind, WebhookType::Test)
     }
 }
 

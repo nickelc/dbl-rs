@@ -12,10 +12,7 @@ pub enum Error {
 
 impl Error {
     pub fn is_ratelimit(&self) -> bool {
-        match self {
-            Error::Ratelimit { .. } => true,
-            _ => false,
-        }
+        std::matches!(self, Error::Ratelimit { .. })
     }
 
     pub fn status(&self) -> Option<StatusCode> {
