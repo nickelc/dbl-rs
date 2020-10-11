@@ -29,7 +29,6 @@ dbl-rs = "0.2"
 ```rust
 use dbl::types::ShardStats;
 use dbl::Client;
-use tokio::runtime::Runtime;
 
 #[tokio::main]
 async fn main() {
