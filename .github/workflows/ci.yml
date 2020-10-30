@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   lints:
     name: Format and clippy
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout sources
@@ -26,14 +26,11 @@ jobs:
           args: --all-features -- -D warnings
 
       - name: Run rustfmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+        run: cargo fmt --all -- --check
 
   build_and_test:
     name: Build and test
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -51,19 +48,10 @@ jobs:
           override: true
 
       - name: Check default features
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
-          args: --all --examples --tests
+        run: cargo check --examples --tests
 
       - name: Tests
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all --all-features
+        run: cargo test --all-features
 
       - name: Check webhook example
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
-          args: --manifest-path examples/webhook/Cargo.toml
+        run: cargo check --manifest-path examples/webhook/Cargo.toml
