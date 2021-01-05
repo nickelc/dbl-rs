@@ -6,7 +6,7 @@
 //! Add this to your `Cargo.toml`
 //! ```toml
 //! [dependencies]
-//! dbl-rs = "0.2"
+//! dbl-rs = "0.3"
 //! ```
 //!
 //! ## Example
@@ -36,7 +36,7 @@
 //!     }
 //! }
 //! ```
-#![doc(html_root_url = "https://docs.rs/dbl-rs/0.2.0")]
+#![doc(html_root_url = "https://docs.rs/dbl-rs/0.3.0")]
 #![deny(rust_2018_idioms)]
 
 use reqwest::header::AUTHORIZATION;
