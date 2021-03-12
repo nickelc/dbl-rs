@@ -36,7 +36,7 @@
 //!     }
 //! }
 //! ```
-#![doc(html_root_url = "https://docs.rs/dbl-rs/0.3.0")]
+#![doc(html_root_url = "https://docs.rs/dbl-rs/0.3.1")]
 #![deny(rust_2018_idioms)]
 
 use reqwest::header::AUTHORIZATION;
