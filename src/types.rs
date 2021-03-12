@@ -33,7 +33,7 @@ pub struct DetailedUser {
     pub default_avatar: String,
     pub bio: Option<String>,
     pub banner: Option<String>,
-    pub social: Social,
+    pub social: Option<Social>,
     pub color: Option<String>,
     pub supporter: bool,
     pub certified_dev: bool,
