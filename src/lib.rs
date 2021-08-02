@@ -99,7 +99,7 @@ impl Client {
     /// let filter = Filter::new().search("lib:serenity foobar");
     /// ```
     pub async fn search(&self, filter: &Filter) -> Result<Listing, Error> {
-        let url = Url::parse_with_params(&api!("/bots"), &filter.0).map_err(Error::Url)?;
+        let url = Url::parse_with_params(api!("/bots"), &filter.0).map_err(Error::Url)?;
         get(self, url.to_string()).await
     }
 
