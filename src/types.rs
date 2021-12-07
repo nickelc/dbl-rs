@@ -173,7 +173,9 @@ pub struct Webhook {
     pub user: UserId,
     #[serde(rename = "type")]
     pub kind: WebhookType,
+    #[serde(default)]
     pub is_weekend: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
 }
 
@@ -290,3 +292,56 @@ macro_rules! impl_snowflake {
 }
 
 impl_snowflake!(BotId, GuildId, UserId);
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use serde_test::Token;
+
+    #[test]
+    fn webhook_serde() {
+        let value = Webhook {
+            bot: BotId(1),
+            user: UserId(2),
+            kind: WebhookType::Test,
+            is_weekend: false,
+            query: None,
+        };
+
+        serde_test::assert_tokens(&value, &[
+            Token::Struct { name: "Webhook", len: 4 },
+            Token::Str("bot"),
+            Token::Str("1"),
+            Token::Str("user"),
+            Token::Str("2"),
+            Token::Str("type"),
+            Token::UnitVariant { name: "WebhookType", variant: "test" },
+            Token::Str("isWeekend"),
+            Token::Bool(false),
+            Token::StructEnd,
+        ]);
+    }
+
+    #[test]
+    fn webhook_de_no_weekend() {
+        let value = Webhook {
+            bot: BotId(1),
+            user: UserId(2),
+            kind: WebhookType::Test,
+            is_weekend: false,
+            query: None,
+        };
+
+        serde_test::assert_de_tokens(&value, &[
+            Token::Struct { name: "Webhook", len: 3 },
+            Token::Str("bot"),
+            Token::Str("1"),
+            Token::Str("user"),
+            Token::Str("2"),
+            Token::Str("type"),
+            Token::UnitVariant { name: "WebhookType", variant: "test" },
+            Token::StructEnd,
+        ]);
+    }
+}

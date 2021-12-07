@@ -34,3 +34,4 @@ features = ["derive"]
 
 [dev-dependencies]
 tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+serde_test = "1"
