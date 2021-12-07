@@ -309,18 +309,27 @@ mod tests {
             query: None,
         };
 
-        serde_test::assert_tokens(&value, &[
-            Token::Struct { name: "Webhook", len: 4 },
-            Token::Str("bot"),
-            Token::Str("1"),
-            Token::Str("user"),
-            Token::Str("2"),
-            Token::Str("type"),
-            Token::UnitVariant { name: "WebhookType", variant: "test" },
-            Token::Str("isWeekend"),
-            Token::Bool(false),
-            Token::StructEnd,
-        ]);
+        serde_test::assert_tokens(
+            &value,
+            &[
+                Token::Struct {
+                    name: "Webhook",
+                    len: 4,
+                },
+                Token::Str("bot"),
+                Token::Str("1"),
+                Token::Str("user"),
+                Token::Str("2"),
+                Token::Str("type"),
+                Token::UnitVariant {
+                    name: "WebhookType",
+                    variant: "test",
+                },
+                Token::Str("isWeekend"),
+                Token::Bool(false),
+                Token::StructEnd,
+            ],
+        );
     }
 
     #[test]
@@ -333,15 +342,24 @@ mod tests {
             query: None,
         };
 
-        serde_test::assert_de_tokens(&value, &[
-            Token::Struct { name: "Webhook", len: 3 },
-            Token::Str("bot"),
-            Token::Str("1"),
-            Token::Str("user"),
-            Token::Str("2"),
-            Token::Str("type"),
-            Token::UnitVariant { name: "WebhookType", variant: "test" },
-            Token::StructEnd,
-        ]);
+        serde_test::assert_de_tokens(
+            &value,
+            &[
+                Token::Struct {
+                    name: "Webhook",
+                    len: 3,
+                },
+                Token::Str("bot"),
+                Token::Str("1"),
+                Token::Str("user"),
+                Token::Str("2"),
+                Token::Str("type"),
+                Token::UnitVariant {
+                    name: "WebhookType",
+                    variant: "test",
+                },
+                Token::StructEnd,
+            ],
+        );
     }
 }
