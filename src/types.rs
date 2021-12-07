@@ -282,7 +282,7 @@ macro_rules! impl_snowflake {
                 where
                     S: ::serde::ser::Serializer,
                 {
-                    serializer.serialize_str(&self.0.to_string())
+                    serializer.collect_str(&self.0)
                 }
             }
         )*
