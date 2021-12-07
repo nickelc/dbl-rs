@@ -173,7 +173,7 @@ pub struct Webhook {
     pub user: UserId,
     #[serde(rename = "type")]
     pub kind: WebhookType,
-    pub is_weekend: bool,
+    pub is_weekend: Option<bool>,
     pub query: Option<String>,
 }
 
