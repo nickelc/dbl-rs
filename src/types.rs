@@ -3,17 +3,17 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 /// Newtype for bot ids.
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct BotId(pub u64);
 /// Newtype for user ids.
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct UserId(pub u64);
 /// Newtype for guild ids.
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct GuildId(pub u64);
 
 /// Basic user information returned by [`Client::votes`](super::Client::votes).
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq)]
 pub struct User {
     pub id: UserId,
     pub username: String,
@@ -22,7 +22,7 @@ pub struct User {
 }
 
 /// Detailed user information returned by [`Client::user`](super::Client::user).
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct DetailedUser {
     pub id: UserId,
@@ -44,7 +44,7 @@ pub struct DetailedUser {
 }
 
 /// Social media accounts of the user.
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq)]
 pub struct Social {
     pub github: Option<String>,
     pub instagram: Option<String>,
@@ -54,7 +54,7 @@ pub struct Social {
 }
 
 /// Information about a bot.
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Bot {
     pub id: BotId,
@@ -86,7 +86,7 @@ pub struct Bot {
 }
 
 /// Bot's sharding stats.
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq)]
 pub struct Stats {
     pub server_count: Option<u64>,
     pub shards: Vec<u64>,
@@ -156,7 +156,7 @@ impl Filter {
 }
 
 /// Search result returned by [`Client::search`](super::Client::search).
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq)]
 pub struct Listing {
     pub results: Vec<Bot>,
     pub limit: u64,
@@ -166,7 +166,7 @@ pub struct Listing {
 }
 
 /// Vote received via webhook.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Webhook {
     pub bot: BotId,
@@ -178,7 +178,7 @@ pub struct Webhook {
 }
 
 /// Type of vote received via webhook.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum WebhookType {
     Upvote,
