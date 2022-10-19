@@ -5,15 +5,14 @@ authors = ["Constantin Nickel <constantin.nickel@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-dbl-rs = "0.2"
-futures-util = "0.3.0"
-tokio = { version = "0.2", features = ["macros"] }
-warp = { version = "0.2", default-features = false }
+dbl-rs = "0.3"
+tokio = { version = "1.21", features = ["macros", "rt-multi-thread"] }
+warp = { version = "0.3", default-features = false }
 
 [dependencies.serde]
 version = "1"
 features = ["derive"]
 
 [dependencies.reqwest]
-version = "0.10.0"
+version = "0.11"
 features = ["json"]

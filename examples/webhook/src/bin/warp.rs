@@ -1,5 +1,4 @@
 use dbl::types::Webhook;
-use futures_util::future;
 use warp::body::BodyDeserializeError;
 use warp::http::StatusCode;
 use warp::path;
@@ -10,11 +9,11 @@ async fn main() {
     let secret = "mywebhook";
 
     let filter = warp::header::<String>("authorization")
-        .and_then(move |value| {
+        .and_then(move |value| async move {
             if value == secret {
-                future::ok(())
+                Ok(())
             } else {
-                future::err(warp::reject::custom(Unauthorized))
+                Err(warp::reject::custom(Unauthorized))
             }
         })
         .untuple_one();
