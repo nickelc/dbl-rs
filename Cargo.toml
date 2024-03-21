@@ -24,7 +24,7 @@ rustls-tls = ["reqwest/rustls-tls"]
 url = "2.2"
 
 [dependencies.reqwest]
-version = "0.11"
+version = "0.12"
 default-features = false
 features = ["json"]
 
